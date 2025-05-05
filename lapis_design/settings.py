@@ -10,7 +10,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')  # Change this in production
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['https://merkazvibe.onrender.com', 'https://merkazvibe.onrender.com']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
