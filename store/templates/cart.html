@@ -1,0 +1,486 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart - MerkazVibe</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7fafc;
+            color: #2d3748;
+        }
+        header {
+            background-color: #f60;
+            color: #fff;
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+        .logo-svg {
+            width: 90px;
+            height: 35px;
+        }
+        .logo-text {
+            font-size: 1.6em;
+            font-weight: 700;
+            margin-left: 12px;
+        }
+        .search-bar {
+            display: flex;
+            gap: 10px;
+            background-color: #edf2f7;
+            border-radius: 8px;
+            padding: 10px;
+            width: 450px;
+            transition: box-shadow 0.3s ease;
+        }
+        .search-bar:focus-within {
+            box-shadow: 0 0 0 3px rgba(255, 102, 0, 0.2);
+        }
+        .search-input {
+            border: none;
+            padding: 10px;
+            flex-grow: 1;
+            background: transparent;
+            color: #2d3748;
+            font-size: 1em;
+        }
+        .search-input:focus {
+            outline: none;
+        }
+        .search-button {
+            background-color: #1a73e8;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+        .search-button:hover {
+            background-color: #2563eb;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            align-items: center;
+        }
+        nav ul li {
+            margin-left: 25px;
+        }
+        nav a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: 600;
+            font-size: 1em;
+            transition: color 0.3s ease;
+        }
+        nav a:hover {
+            color: #e2e8f0;
+        }
+        .cart-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+        .cart-header {
+            font-size: 1.8em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #f60;
+        }
+        .cart-items {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .cart-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            border-bottom: 1px solid #e2e8f0;
+            padding: 15px 0;
+        }
+        .cart-item img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .cart-item-info {
+            flex: 1;
+        }
+        .cart-item-info h3 {
+            margin: 0;
+            font-size: 1.2em;
+            color: #1a73e8;
+        }
+        .cart-item-info p {
+            margin: 5px 0;
+            color: #4a5568;
+        }
+        .cart-item-info .price {
+            font-weight: 700;
+            color: #2b6cb0;
+        }
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .quantity-control input {
+            width: 60px;
+            padding: 8px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1em;
+        }
+        .quantity-control button {
+            background-color: #e6f0fa;
+            color: #1a73e8;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+        .quantity-control button:hover {
+            background-color: #bfdbfe;
+        }
+        .remove-btn {
+            background-color: #e53e3e;
+            color: #fff;
+            padding: 8px 15px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+        .remove-btn:hover {
+            background-color: #c53030;
+        }
+        .cart-summary {
+            margin-top: 20px;
+            text-align: right;
+            padding: 20px;
+            border-top: 1px solid #e2e8f0;
+        }
+        .cart-summary .summary-item {
+            font-size: 1.1em;
+            color: #4a5568;
+            margin-bottom: 10px;
+        }
+        .cart-summary .total {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #f60;
+            margin-bottom: 20px;
+        }
+        .promo-code {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+        .promo-code input {
+            padding: 8px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1em;
+            width: 200px;
+        }
+        .promo-code button {
+            background-color: #1a73e8;
+            color: #fff;
+            padding: 8px 15px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+        .promo-code button:hover {
+            background-color: #2563eb;
+        }
+        .cart-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .checkout-btn, .continue-btn, .clear-cart-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .checkout-btn {
+            background-color: #f60;
+            color: #fff;
+        }
+        .checkout-btn:hover {
+            background-color: #e55;
+            transform: translateY(-2px);
+        }
+        .continue-btn {
+            background-color: #e6f0fa;
+            color: #1a73e8;
+        }
+        .continue-btn:hover {
+            background-color: #bfdbfe;
+            transform: translateY(-2px);
+        }
+        .clear-cart-btn {
+            background-color: #e53e3e;
+            color: #fff;
+        }
+        .clear-cart-btn:hover {
+            background-color: #c53030;
+            transform: translateY(-2px);
+        }
+        .empty-cart {
+            text-align: center;
+            padding: 40px;
+            color: #4a5568;
+            font-size: 1.2em;
+        }
+        footer {
+            background-color: #2b6cb0;
+            color: #fff;
+            text-align: center;
+            padding: 25px;
+            margin-top: 40px;
+            font-size: 0.95em;
+        }
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .search-bar {
+                width: 100%;
+            }
+            nav ul {
+                flex-direction: column;
+                gap: 10px;
+            }
+            nav ul li {
+                margin-left: 0;
+            }
+            .cart-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .cart-summary {
+                text-align: center;
+            }
+            .promo-code {
+                justify-content: center;
+            }
+            .cart-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container mx-auto flex justify-between items-center flex-wrap">
+            <div class="logo-container">
+                <svg class="logo-svg" viewBox="0 0 100 30">
+                    <rect x="10" y="5" width="20" height="20" fill="#bfdbfe" rx="4"/>
+                    <rect x="40" y="5" width="20" height="20" fill="#2b6cb0" rx="4"/>
+                    <rect x="70" y="5" width="20" height="20" fill="#1a73e8" rx="4"/>
+                </svg>
+                <div class="logo-text">MerkazVibe</div>
+            </div>
+            <div class="search-bar">
+                <input type="text" class="search-input" id="search-input" placeholder="Search products...">
+                <button class="search-button" onclick="searchProducts()">Search</button>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="{% url 'index' %}">Home</a></li>
+                    <li><a href="{% url 'product_details' 1 %}">Products</a></li>
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'logout' %}">Logout</a></li>
+                    {% else %}
+                        <li><a href="{% url 'signup' %}">Account</a></li>
+                    {% endif %}
+                    <li><a href="{% url 'cart' %}">Cart</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="cart-container">
+        <h1 class="cart-header">Your Cart</h1>
+        {% if cart_items %}
+            <div class="cart-items">
+                {% for item in cart_items %}
+                    <div class="cart-item">
+                        {% if item.product.image %}
+                            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                        {% else %}
+                            <img src="{% static 'images/default-product.png' %}" alt="Default Image">
+                        {% endif %}
+                        <div class="cart-item-info">
+                            <h3>{{ item.product.name }}</h3>
+                            <p class="price">Price: ${{ item.product.price }}</p>
+                            <div class="quantity-control">
+                                <form method="post" action="{% url 'update_cart' item.product.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" name="action" value="decrease">-</button>
+                                    <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="{{ item.product.quantity }}">
+                                    <button type="submit" name="action" value="increase">+</button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="cart-item-total">
+                            <p>Total: ${{ item.total_price|floatformat:2 }}</p>
+                            <form method="post" action="{% url 'remove_from_cart' item.product.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="remove-btn">Remove</button>
+                            </form>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="cart-summary">
+                <div class="promo-code">
+                    <input type="text" id="promo-code" placeholder="Enter promo code">
+                    <button onclick="applyPromo()">Apply</button>
+                </div>
+                <div class="summary-item">Subtotal: ${{ subtotal|floatformat:2 }}</div>
+                <div class="summary-item">Estimated Tax: ${{ tax|floatformat:2 }}</div>
+                <div class="summary-item">Estimated Delivery: 3-5 Business Days</div>
+                <div class="total">Total Price: ${{ total_price|floatformat:2 }}</div>
+                <div class="cart-actions">
+                    <a href="{% url 'index' %}" class="continue-btn">Continue Shopping</a>
+                    <form id="clear-cart-form" method="post" action="{% url 'clear_cart' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="clear-cart-btn">Clear Cart</button>
+                    </form>
+                    <form id="checkout-form">
+                        <button type="button" class="checkout-btn" onclick="payWithPaystack()">Checkout</button>
+                    </form>
+                </div>
+            </div>
+        {% else %}
+            <p class="empty-cart">Your cart is empty. <a href="{% url 'index' %}" class="text-blue-600 hover:underline">Start shopping now!</a></p>
+        {% endif %}
+    </div>
+
+    <footer>
+        <p>© 2025 MerkazVibe. All rights reserved.</p>
+    </footer>
+
+    <script src="https://js.paystack.co/v1/inline.js"></script>
+    <script>
+        function payWithPaystack() {
+            const handler = PaystackPop.setup({
+                key: '{{ paystack_public_key }}',
+                email: '{{ user.email }}',
+                amount: {{ total_price|floatformat:2 }} * 100,
+                currency: 'USD',
+                ref: 'PSK_' + Math.floor((Math.random() * 1000000000) + 1),
+                callback: function(response) {
+                    fetch('/verify-payment/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': '{{ csrf_token }}'
+                        },
+                        body: JSON.stringify({
+                            reference: response.reference
+                        })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            alert('Payment successful!');
+                            window.location.href = '/order-success/';
+                        } else {
+                            alert('Payment verification failed.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error verifying payment:', error);
+                        alert('An error occurred while verifying payment.');
+                    });
+                },
+                onClose: function() {
+                    alert('Payment process was canceled.');
+                }
+            });
+            handler.openIframe();
+        }
+
+        function applyPromo() {
+            const promoCode = document.getElementById('promo-code').value;
+            if (promoCode) {
+                fetch('/apply-promo/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({ promo_code: promoCode })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Promo code applied successfully!');
+                        window.location.reload(); // Reload to update prices
+                    } else {
+                        alert(data.message || 'Invalid promo code.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error applying promo code:', error);
+                    alert('An error occurred while applying the promo code.');
+                });
+            } else {
+                alert('Please enter a promo code.');
+            }
+        }
+
+        async function searchProducts() {
+            const searchQuery = document.getElementById('search-input').value;
+            try {
+                const response = await fetch(`/search/?query=${encodeURIComponent(searchQuery)}`);
+                const data = await response.json();
+                window.location.href = `/search/?query=${encodeURIComponent(searchQuery)}`;
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    </script>
+</body>
+</html>

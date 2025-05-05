@@ -1,0 +1,455 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product.name }} - MerkazVibe</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7fafc;
+            color: #2d3748;
+        }
+        header {
+            background-color: #f60;
+            color: #fff;
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+        .logo-svg {
+            width: 90px;
+            height: 35px;
+        }
+        .logo-text {
+            font-size: 1.6em;
+            font-weight: 700;
+            margin-left: 12px;
+        }
+        .search-bar {
+            display: flex;
+            gap: 10px;
+            background-color: #edf2f7;
+            border-radius: 8px;
+            padding: 10px;
+            width: 450px;
+            transition: box-shadow 0.3s ease;
+        }
+        .search-bar:focus-within {
+            box-shadow: 0 0 0 3px rgba(255, 102, 0, 0.2);
+        }
+        .search-input {
+            border: none;
+            padding: 10px;
+            flex-grow: 1;
+            background: transparent;
+            color: #2d3748;
+            font-size: 1em;
+        }
+        .search-input:focus {
+            outline: none;
+        }
+        .search-button {
+            background-color: #1a73e8;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+        .search-button:hover {
+            background-color: #2563eb;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            align-items: center;
+        }
+        nav ul li {
+            margin-left: 25px;
+        }
+        nav a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: 600;
+            font-size: 1em;
+            transition: color 0.3s ease;
+        }
+        nav a:hover {
+            color: #e2e8f0;
+        }
+        main {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .breadcrumbs {
+            margin-bottom: 20px;
+            font-size: 0.95em;
+        }
+        .breadcrumbs a {
+            color: #1a73e8;
+            text-decoration: none;
+        }
+        .breadcrumbs a:hover {
+            text-decoration: underline;
+        }
+        .breadcrumbs span {
+            color: #4a5568;
+        }
+        .product-details {
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+        .product-image {
+            flex: 1;
+            min-width: 300px;
+        }
+        .product-image img {
+            width: 100%;
+            height: auto;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        .product-image .no-image {
+            width: 100%;
+            height: 400px;
+            background-color: #e6f0fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            color: #4a5568;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+        .product-info {
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .product-info h2 {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #1a73e8;
+            margin: 0 0 15px;
+        }
+        .product-info p {
+            font-size: 1em;
+            color: #4a5568;
+            line-height: 1.6;
+            margin: 0 0 20px;
+        }
+        .rating {
+            margin-bottom: 15px;
+            color: #f60;
+            font-size: 1em;
+        }
+        .price {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #2b6cb0;
+            margin-bottom: 15px;
+        }
+        .quantity {
+            font-size: 1.1em;
+            color: #4a5568;
+            margin-bottom: 25px;
+        }
+        .quantity-selector {
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .quantity-selector input {
+            width: 60px;
+            padding: 8px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1em;
+        }
+        .buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            background-color: #f60;
+            color: #fff;
+            padding: 12px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1em;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .btn:hover {
+            background-color: #e55;
+            transform: translateY(-2px);
+        }
+        .btn-secondary {
+            background-color: #e6f0fa;
+            color: #f60;
+        }
+        .btn-secondary:hover {
+            background-color: #bfdbfe;
+            transform: translateY(-2px);
+        }
+        .related-products {
+            margin-top: 40px;
+        }
+        .related-products h3 {
+            font-size: 1.8em;
+            font-weight: 700;
+            color: #2d3748;
+            margin-bottom: 20px;
+        }
+        .related-products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+        .related-product {
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .related-product:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+        .related-product img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .related-product .no-image {
+            background-color: #e6f0fa;
+            height: 200px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4a5568;
+        }
+        .related-product h4 {
+            font-weight: 700;
+            color: #1a73e8;
+            margin-bottom: 8px;
+            font-size: 1.2em;
+        }
+        .related-product p {
+            color: #4a5568;
+            margin-bottom: 12px;
+            font-size: 0.95em;
+        }
+        footer {
+            background-color: #2b6cb0;
+            color: #fff;
+            text-align: center;
+            padding: 25px;
+            margin-top: 40px;
+            font-size: 0.95em;
+        }
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .search-bar {
+                width: 100%;
+            }
+            .product-details {
+                flex-direction: column;
+                padding: 20px;
+            }
+            .product-info h2 {
+                font-size: 1.5em;
+            }
+            nav ul {
+                flex-direction: column;
+                gap: 10px;
+            }
+            nav ul li {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container mx-auto flex justify-between items-center flex-wrap">
+            <div class="logo-container">
+                <svg class="logo-svg" viewBox="0 0 100 30">
+                    <rect x="10" y="5" width="20" height="20" fill="#bfdbfe" rx="4"/>
+                    <rect x="40" y="5" width="20" height="20" fill="#2b6cb0" rx="4"/>
+                    <rect x="70" y="5" width="20" height="20" fill="#1a73e8" rx="4"/>
+                </svg>
+                <div class="logo-text">MerkazVibe</div>
+            </div>
+            <div class="search-bar">
+                <input type="text" class="search-input" id="search-input" placeholder="Search products...">
+                <button class="search-button" onclick="searchProducts()">Search</button>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="{% url 'index' %}">Home</a></li>
+                    <li><a href="{% url 'product_details' 1 %}">Products</a></li>
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'logout' %}">Logout</a></li>
+                    {% else %}
+                        <li><a href="{% url 'signup' %}">Account</a></li>
+                    {% endif %}
+                    <li><a href="{% url 'cart' %}">Cart</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="breadcrumbs">
+            <a href="{% url 'index' %}">Home</a> &gt;
+            <a href="#">Category</a> &gt;
+            <span>{{ product.name }}</span>
+        </div>
+        <div class="product-details">
+            <!-- Product Image -->
+            <div class="product-image">
+                {% if product.image %}
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                {% else %}
+                    <div class="no-image">No Image Available</div>
+                {% endif %}
+            </div>
+
+            <!-- Product Info -->
+            <div class="product-info">
+                <h2>{{ product.name }}</h2>
+                <div class="rating">★★★★☆ (4.5/5)</div>
+                <p>{{ product.description }}</p>
+                <div class="price">Price: ${{ product.price }}</div>
+                <div class="quantity">Available Quantity: {{ product.quantity }}</div>
+                <div class="quantity-selector">
+                    <label for="quantity-input">Quantity:</label>
+                    <input type="number" id="quantity-input" name="quantity" value="1" min="1" max="{{ product.quantity }}">
+                </div>
+                <!-- Buttons -->
+                <div class="buttons">
+                    <form method="post" action="{% url 'add_to_cart' product.id %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="quantity" value="1" id="form-quantity">
+                        <button type="submit" class="btn">Add to Cart</button>
+                    </form>
+                    <a href="{% url 'live_preview' product.id %}" class="btn btn-secondary">Live Preview</a>
+                    <a href="{% url 'index' %}" class="btn btn-secondary">Back to Products</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Related Products -->
+        <section class="related-products">
+            <h3>Related Products</h3>
+            <div class="related-products-grid">
+                {% if related_products %}
+                    {% for related in related_products|slice:":4" %}
+                        <div class="related-product">
+                            <a href="{% url 'product_details' related.id %}">
+                                {% if related.image %}
+                                    <img src="{{ related.image.url }}" alt="{{ related.name }}">
+                                {% else %}
+                                    <div class="no-image">No Image</div>
+                                {% endif %}
+                                <h4>{{ related.name }}</h4>
+                                <p>${{ related.price }}</p>
+                            </a>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="related-product">
+                        <a href="{% url 'product_details' 1 %}">
+                            <div class="no-image">No Image</div>
+                            <h4>Smartphone</h4>
+                            <p>$299.99</p>
+                        </a>
+                    </div>
+                    <div class="related-product">
+                        <a href="{% url 'product_details' 2 %}">
+                            <div class="no-image">No Image</div>
+                            <h4>Laptop</h4>
+                            <p>$999.99</p>
+                        </a>
+                    </div>
+                    <div class="related-product">
+                        <a href="{% url 'product_details' 3 %}">
+                            <div class="no-image">No Image</div>
+                            <h4>Headphones</h4>
+                            <p>$49.99</p>
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2025 MerkazVibe. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Update hidden quantity field based on input
+        document.addEventListener('DOMContentLoaded', function() {
+            const quantityInput = document.getElementById('quantity-input');
+            const formQuantity = document.getElementById('form-quantity');
+            if (quantityInput && formQuantity) {
+                quantityInput.addEventListener('input', () => {
+                    formQuantity.value = quantityInput.value;
+                });
+            }
+        });
+
+        async function searchProducts() {
+            const searchQuery = document.getElementById('search-input').value;
+            try {
+                const response = await fetch(`/search/?query=${encodeURIComponent(searchQuery)}`);
+                const data = await response.json();
+                window.location.href = `/search/?query=${encodeURIComponent(searchQuery)}`;
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    </script>
+</body>
+</html>

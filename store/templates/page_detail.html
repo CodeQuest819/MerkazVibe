@@ -1,0 +1,544 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Grab the hottest deals on fashion and electronics at MerkazVibe. Limited-time offers!">
+    <meta name="keywords" content="hot deals, e-commerce, fashion, electronics, MerkazVibe">
+    <meta property="og:title" content="MerkazVibe - Hot Deals">
+    <meta property="og:description" content="Limited-time deals on top products at MerkazVibe.">
+    <meta property="og:image" content="{% static 'images/og-image.jpg' %}">
+    <!-- Replace any reverse lookup for hot_deals with a valid call using the slug -->
+    <link rel="canonical" href="{{ request.build_absolute_uri }}">
+    <title>MerkazVibe - Hot Deals</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-..." crossorigin="anonymous">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7fafc;
+            color: #2d3748;
+        }
+        header {
+            background-color: #f60;
+            color: #fff;
+            padding: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+        .logo-svg {
+            width: 70px;
+            height: 30px;
+        }
+        .logo-text {
+            font-size: 1.4em;
+            font-weight: 700;
+            margin-left: 8px;
+        }
+        .search-bar {
+            display: flex;
+            gap: 8px;
+            background-color: #edf2f7;
+            border-radius: 8px;
+            padding: 8px;
+            flex-grow: 1;
+            max-width: 500px;
+            transition: box-shadow 0.3s ease;
+        }
+        .search-bar:focus-within {
+            box-shadow: 0 0 0 3px rgba(255, 102, 0, 0.2);
+        }
+        .search-input {
+            border: none;
+            padding: 8px;
+            flex-grow: 1;
+            background: transparent;
+            color: #2d3748;
+            font-size: 0.95em;
+        }
+        .search-input:focus {
+            outline: none;
+        }
+        .search-button {
+            background-color: #1a73e8;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+        .search-button:hover {
+            background-color: #2563eb;
+        }
+        nav {
+            display: flex;
+            align-items: center;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            transition: max-height 0.3s ease-in-out;
+            max-height: 500px;
+        }
+        nav ul li {
+            margin-left: 15px;
+        }
+        nav a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.95em;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        nav a:hover {
+            color: #e2e8f0;
+        }
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 1.5em;
+            cursor: pointer;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .flex-container {
+            display: flex;
+            gap: 20px;
+        }
+        aside {
+            background-color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            width: 20%;
+        }
+        aside h3 {
+            font-size: 1.2em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        aside ul {
+            list-style: none;
+            padding: 0;
+        }
+        aside a {
+            text-decoration: none;
+            color: #4a5568;
+            font-size: 0.95em;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        aside a:hover {
+            color: #f60;
+        }
+        .deals-banner {
+            background: linear-gradient(90deg, #ff6200, #ffd700);
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .deals-banner h2 {
+            font-size: 2em;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 10px;
+        }
+        .deals-banner p {
+            font-size: 1.1em;
+            color: #fff;
+        }
+        .deal-filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .deal-filter {
+            background-color: #fff;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #2d3748;
+            transition: background-color 0.3s ease;
+        }
+        .deal-filter:hover, .deal-filter.active {
+            background-color: #f60;
+            color: #fff;
+        }
+        .deal-products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .deal-card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+        .deal-card:hover {
+            transform: scale(1.05);
+        }
+        .deal-card a {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        .deal-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+        .deal-placeholder {
+            background-color: #e6f0fa;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4a5568;
+        }
+        .deal-card .p-4 {
+            padding: 15px;
+        }
+        .deal-card h4 {
+            font-size: 1.1em;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .deal-card p {
+            font-size: 0.95em;
+            color: #4a5568;
+        }
+        .deal-discount {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #f60;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+        .deal-timer {
+            font-size: 0.9em;
+            color: #e53e3e;
+            margin-top: 8px;
+        }
+        .no-deals {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+        }
+        footer {
+            background-color: #2b6cb0;
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            font-size: 0.9em;
+        }
+        @media (max-width: 1024px) {
+            .header-container {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .search-bar {
+                width: 100%;
+                max-width: none;
+            }
+            .flex-container {
+                flex-direction: column;
+            }
+            aside {
+                width: 100%;
+            }
+        }
+        @media (max-width: 768px) {
+            .logo-svg {
+                width: 60px;
+                height: 25px;
+            }
+            .logo-text {
+                font-size: 1.2em;
+            }
+            nav ul {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                background-color: #f60;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                padding: 10px 0;
+                z-index: 1000;
+                max-height: 0;
+                overflow: hidden;
+            }
+            nav ul.active {
+                display: flex;
+                max-height: 500px;
+            }
+            .menu-toggle {
+                display: block;
+            }
+            .deal-products {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+            .deal-card img, .deal-placeholder {
+                height: 120px;
+            }
+        }
+        @media (max-width: 480px) {
+            .logo-text {
+                font-size: 1em;
+            }
+            .search-input {
+                font-size: 0.9em;
+            }
+            .search-button {
+                padding: 6px 12px;
+                font-size: 0.9em;
+            }
+            .deals-banner h2 {
+                font-size: 1.5em;
+            }
+            .deals-banner p {
+                font-size: 1em;
+            }
+            .deal-products {
+                grid-template-columns: 1fr;
+            }
+            .deal-card img, .deal-placeholder {
+                height: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo-container">
+                <img src="{% static 'images/logo.svg' %}" alt="MerkazVibe Logo" class="logo-svg">
+                <div class="logo-text">MerkazVibe</div>
+            </divangono
+
+            <div class="search-bar">
+                <input type="text" class="search-input" id="search-input" placeholder="Search deals..." aria-label="Search deals">
+                <button class="search-button" aria-label="Search" onclick="searchDeals()"><i class="fas fa-search"></i></button>
+            </div>
+            <nav aria-label="Main navigation">
+                <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false"><i class="fas fa-bars"></i></button>
+                <ul>
+                    <li>
+                        <a href="{% url 'index' %}" {% if request.path == '/' %}aria-current="page"{% endif %}>
+                            <i class="fas fa-home"></i> Home
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'page_detail' slug='hotdeals' %}" {% if request.path == '/hotdeals/' %}aria-current="page"{% endif %}>
+                            <i class="fas fa-fire"></i> Hot Deals
+                        </a>
+                    </li>
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                    {% else %}
+                        <li><a href="{% url 'signup' %}"><i class="fas fa-user"></i> Account</a></li>
+                    {% endif %}
+                    <li><a href="{% url 'cart' %}"><i class="fas fa-shopping-cart"></i> Cart</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="flex-container">
+            <aside>
+                <h3>Deal Categories</h3>
+                <ul>
+                    {% for category in deal_categories %}
+                        <li>
+                            <a href="?category={{ category.id }}" class="{% if selected_category == category.id %}font-bold text-orange-600{% else %}text-gray-600{% endif %} hover:text-orange-600" aria-current="{% if selected_category == category.id %}true{% else %}false{% endif %}">
+                                <i class="fas fa-tag"></i> {{ category.name }}
+                            </a>
+                        </li>
+                    {% empty %}
+                        <li>No categories available.</li>
+                    {% endfor %}
+                    <!-- New list item to add product -->
+                    <li>
+                        <a href="{% url 'add_product' %}" class="font-bold text-blue-500 hover:underline">
+                            <i class="fas fa-plus"></i> Add Product
+                        </a>
+                    </li>
+                </ul>
+            </aside>
+            <main>
+                <div class="deals-banner">
+                    <h2>Hot Deals - Limited Time Only!</h2>
+                    <p>Grab these exclusive offers before they’re gone!</p>
+                </div>
+                <div class="deal-filters">
+                    <button class="deal-filter {% if not selected_category %}active{% endif %}" onclick="filterDeals('all')">All Deals</button>
+                    {% for category in deal_categories %}
+                        <button class="deal-filter {% if selected_category == category.id %}active{% endif %}" onclick="filterDeals({{ category.id }})">{{ category.name }}</button>
+                    {% endfor %}
+                </div>
+                <section class="deal-products" aria-label="Hot deals">
+                    {% if deals %}
+                        {% for deal in deals %}
+                        <article class="deal-card">
+                            <a href="{% url 'product_details' deal.id %}">
+                                {% if deal.image %}
+                                <img src="{{ deal.image.url }}" alt="{{ deal.name }}" loading="lazy">
+                                {% else %}
+                                <div class="deal-placeholder">Deal Image</div>
+                                {% endif %}
+                                <div class="deal-discount">{{ deal.discount_percentage }}% OFF</div>
+                                <div class="p-4">
+                                    <h4>{{ deal.name }}</h4>
+                                    <p><span class="line-through text-gray-500">${{ deal.original_price }}</span> ${{ deal.price }}</p>
+                                    <div class="deal-timer" data-end-time="{{ deal.end_time|date:'c' }}">Ends in: <span class="timer"></span></div>
+                                </div>
+                            </a>
+                        </article>
+                        {% endfor %}
+                    {% else %}
+                    <div class="no-deals">No deals available at the moment.</div>
+                    {% endif %}
+                </section>
+            </main>
+        </div>
+    </div>
+    <footer>
+        <p>© 2025 MerkazVibe. All rights reserved.</p>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const menuToggle = document.querySelector('.menu-toggle');
+            const navUl = document.querySelector('nav ul');
+            menuToggle.addEventListener('click', () => {
+                const isExpanded = navUl.classList.toggle('active');
+                menuToggle.setAttribute('aria-expanded', isExpanded);
+            });
+
+            // Countdown timers for deals
+            const timers = document.querySelectorAll('.deal-timer');
+            timers.forEach(timer => {
+                const endTime = new Date(timer.dataset.endTime).getTime();
+                const updateTimer = () => {
+                    const now = new Date().getTime();
+                    const distance = endTime - now;
+                    if (distance < 0) {
+                        timer.innerHTML = 'Expired';
+                        return;
+                    }
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                    timer.querySelector('.timer').innerHTML = `${hours}h ${minutes}m ${seconds}s`;
+                };
+                updateTimer();
+                setInterval(updateTimer, 1000);
+            });
+        });
+
+        async function searchDeals() {
+            const searchInput = document.getElementById('search-input');
+            const productsContainer = document.querySelector('.deal-products');
+            const searchQuery = searchInput.value.trim();
+            if (!searchQuery) return;
+            productsContainer.innerHTML = '<div class="no-deals">Searching...</div>';
+            try {
+                const response = await fetch(`/search-deals/?query=${encodeURIComponent(searchQuery)}`);
+                const data = await response.json();
+                productsContainer.innerHTML = '';
+                if (data.deals.length) {
+                    data.deals.forEach(deal => {
+                        productsContainer.innerHTML += `
+                            <article class="deal-card">
+                                <a href="/product/${deal.id}/">
+                                    ${deal.image ? `<img src="${deal.image}" alt="${deal.name}" loading="lazy">` : '<div class="deal-placeholder">Deal Image</div>'}
+                                    <div class="deal-discount">${deal.discount_percentage}% OFF</div>
+                                    <div class="p-4">
+                                        <h4>${deal.name}</h4>
+                                        <p><span class="line-through text-gray-500">$${deal.original_price}</span> $${deal.price}</p>
+                                        <div class="deal-timer" data-end-time="${deal.end_time}">Ends in: <span class="timer"></span></div>
+                                    </div>
+                                </a>
+                            </article>
+                        `;
+                    });
+                    // Re-initialize timers for new deals
+                    const timers = document.querySelectorAll('.deal-timer');
+                    timers.forEach(timer => {
+                        const endTime = new Date(timer.dataset.endTime).getTime();
+                        const updateTimer = () => {
+                            const now = new Date().getTime();
+                            const distance = endTime - now;
+                            if (distance < 0) {
+                                timer.innerHTML = 'Expired';
+                                return;
+                            }
+                            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                            timer.querySelector('.timer').innerHTML = `${hours}h ${minutes}m ${seconds}s`;
+                        };
+                        updateTimer();
+                        setInterval(updateTimer, 1000);
+                    });
+                } else {
+                    productsContainer.innerHTML = '<div class="no-deals">No deals found.</div>';
+                }
+            } catch (error) {
+                console.error('Search Error:', error);
+                productsContainer.innerHTML = '<div class="no-deals">Error searching deals.</div>';
+            }
+        }
+
+        function filterDeals(categoryId) {
+            window.location.href = categoryId === 'all' ? '/hot-deals/' : `/hot-deals/?category=${categoryId}`;
+        }
+    </script>
+</body>
+</html>
+{% endblock %}

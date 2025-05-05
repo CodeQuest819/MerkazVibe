@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h2 class="text-2xl font-bold mb-4">Add New Top Deal</h2>
+    <form method="post" enctype="multipart/form-data" class="max-w-md">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600">
+            Add Top Deal
+        </button>
+    </form>
+</div>
+{% endblock %}

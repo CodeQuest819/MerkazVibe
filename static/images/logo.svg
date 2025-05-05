@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Background Circle (Optional, for contrast) -->
+  <circle cx="100" cy="100" r="90" fill="#718096" opacity="0.1"/>
+
+  <!-- Stylized 'M' Shape -->
+  <path d="M50 150 L70 50 L90 120 L110 50 L130 150 H110 L100 100 L90 150 H70 Z" fill="none" stroke="#f60" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Shopping Bag (Integrated into 'M') -->
+  <path d="M80 70 Q85 50 90 70" fill="none" stroke="#f60" stroke-width="4" stroke-linecap="round"/>
+  <path d="M80 70 L75 100 Q85 110 95 100 L90 70 Z" fill="#f60" opacity="0.8"/>
+
+  <!-- Tag (Bottom Left of 'M') -->
+  <path d="M60 140 L50 160 L70 150 Z" fill="#718096"/>
+  <circle cx="62" cy="145" r="3" fill="#f60"/>
+
+  <!-- Credit Card (Bottom Right of 'M') -->
+  <rect x="110" y="130" width="30" height="15" rx="3" fill="#718096"/>
+  <rect x="115" y="134" width="20" height="3" fill="#f60"/>
+
+  <!-- Subtle Shadow Effect -->
+  <path d="M50 150 L70 50 L90 120 L110 50 L130 150 H110 L100 100 L90 150 H70 Z" fill="none" stroke="#000" stroke-width="8" stroke-opacity="0.1" transform="translate(3, 3)"/>
+</svg>

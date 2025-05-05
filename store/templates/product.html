@@ -1,0 +1,253 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MerkazVibe - All Products</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7fafc;
+            color: #2d3748;
+        }
+        header {
+            background-color: #f60;
+            color: #fff;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        .logo-container {
+            display: flex;
+            align-items: center;
+        }
+        .logo-svg {
+            width: 90px;
+            height: 35px;
+        }
+        .logo-text {
+            font-size: 1.6em;
+            font-weight: 700;
+            margin-left: 12px;
+        }
+        .search-bar {
+            display: flex;
+            gap: 10px;
+            background-color: #edf2f7;
+            border-radius: 8px;
+            padding: 10px;
+            width: 450px;
+            transition: box-shadow 0.3s ease;
+        }
+        .search-bar:focus-within {
+            box-shadow: 0 0 0 3px rgba(255, 102, 0, 0.2);
+        }
+        .search-input {
+            border: none;
+            padding: 10px;
+            flex-grow: 1;
+            background: transparent;
+            color: #2d3748;
+            font-size: 1em;
+        }
+        .search-input:focus {
+            outline: none;
+        }
+        .search-button {
+            background-color: #1a73e8;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+        .search-button:hover {
+            background-color: #2563eb;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            align-items: center;
+        }
+        nav ul li {
+            margin-left: 25px;
+        }
+        nav a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: 600;
+            font-size: 1em;
+            transition: color 0.3s ease;
+        }
+        nav a:hover {
+            color: #e2e8f0;
+        }
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 40px auto;
+        }
+        .product-card {
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        }
+        .product-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .product-placeholder {
+            background-color: #e6f0fa;
+            height: 200px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #4a5568;
+        }
+        .product-info {
+            margin-top: 15px;
+        }
+        .product-info h3 {
+            font-weight: 700;
+            color: #1a73e8;
+            margin-bottom: 8px;
+            font-size: 1.2em;
+        }
+        .product-info p {
+            color: #4a5568;
+            margin-bottom: 12px;
+            font-size: 0.95em;
+        }
+        .product-info .price {
+            color: #2b6cb0;
+            font-weight: 700;
+            margin-bottom: 12px;
+            font-size: 1.1em;
+        }
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        footer {
+            background-color: #2b6cb0;
+            color: #fff;
+            text-align: center;
+            padding: 25px;
+            margin-top: 40px;
+            font-size: 0.95em;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo-container">
+            <svg class="logo-svg" viewBox="0 0 100 30">
+                <rect x="10" y="5" width="20" height="20" fill="#bfdbfe" rx="4"/>
+                <rect x="40" y="5" width="20" height="20" fill="#2b6cb0" rx="4"/>
+                <rect x="70" y="5" width="20" height="20" fill="#1a73e8" rx="4"/>
+            </svg>
+            <div class="logo-text">MerkazVibe</div>
+        </div>
+        <div class="search-bar">
+            <input type="text" class="search-input" id="search-input" placeholder="Search products...">
+            <button class="search-button" onclick="searchProducts()">Search</button>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="{% url 'index' %}">Home</a></li>
+                <li><a href="{% url 'product_details' 1 %}">Products</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'logout' %}">Logout</a></li>
+                {% else %}
+                    <li><a href="{% url 'signup' %}">Account</a></li>
+                {% endif %}
+                <li><a href="{% url 'cart' %}">Cart</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="products">
+        {% if products %}
+            {% for product in products %}
+                <div class="product-card">
+                    <a href="{% url 'product_details' product.id %}">
+                        {% if product.image %}
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                        {% else %}
+                            <div class="product-placeholder">Product Image</div>
+                        {% endif %}
+                        <div class="product-info">
+                            <h3>{{ product.name }}</h3>
+                            <p class="price">${{ product.price }}</p>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="no-results">No products available.</div>
+        {% endif %}
+    </div>
+
+    <footer>
+        <p>© 2025 MerkazVibe. All rights reserved.</p>
+    </footer>
+
+    <script>
+        async function searchProducts() {
+            const searchQuery = document.getElementById('search-input').value;
+            try {
+                const response = await fetch(`/search/?query=${encodeURIComponent(searchQuery)}`);
+                const data = await response.json();
+                const productsContainer = document.querySelector('.products');
+                productsContainer.innerHTML = '';
+                data.products.forEach(product => {
+                    productsContainer.innerHTML += `
+                        <div class="product-card">
+                            <a href="/product/${product.id}/">
+                                ${product.image ? `<img src="${product.image}" alt="${product.name}">` : '<div class="product-placeholder">Product Image</div>'}
+                                <div class="product-info">
+                                    <h3>${product.name}</h3>
+                                    <p class="price">$${product.price}</p>
+                                </div>
+                            </a>
+                        </div>
+                    `;
+                });
+                if (data.products.length === 0) {
+                    productsContainer.innerHTML = '<div class="no-results">No products found.</div>';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    </script>
+</body>
+</html> 

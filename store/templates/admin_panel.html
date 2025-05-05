@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .tab-active {
+            background-color: #f3f4f6;
+            border-bottom: 2px solid #3b82f6;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-6">
+        <h1 class="text-3xl font-bold mb-6">Admin Panel</h1>
+
+        <!-- Tabs -->
+        <div class="border-b border-gray-200 mb-6">
+            <nav class="flex space-x-4">
+                <a href="?tab=dashboard" 
+                   class="px-4 py-2 {% if active_tab == 'dashboard' %}tab-active{% endif %}">
+                    Dashboard
+                </a>
+                <a href="?tab=products" 
+                   class="px-4 py-2 {% if active_tab == 'products' %}tab-active{% endif %}">
+                    Products
+                </a>
+                <a href="?tab=categories" 
+                   class="px-4 py-2 {% if active_tab == 'categories' %}tab-active{% endif %}">
+                    Categories
+                </a>
+                <a href="?tab=orders" 
+                   class="px-4 py-2 {% if active_tab == 'orders' %}tab-active{% endif %}">
+                    Orders
+                </a>
+            </nav>
+        </div>
+
+        <!-- Content -->
+        <div class="bg-white rounded-lg shadow p-6">
+            {% if active_tab == 'dashboard' %}
+                <h2 class="text-xl font-bold mb-4">Dashboard Overview</h2>
+                <!-- Dashboard content -->
+            {% endif %}
+
+            {% if active_tab == 'products' %}
+                <h2 class="text-xl font-bold mb-4">Manage Products</h2>
+                <form method="post" enctype="multipart/form-data" class="max-w-lg">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="add_product">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Product Name</label>
+                            <input type="text" name="name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Description</label>
+                            <textarea name="description" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Price</label>
+                            <input type="number" name="price" step="0.01" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Quantity</label>
+                            <input type="number" name="quantity" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Category</label>
+                            <select name="category" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                                {% for category in categories %}
+                                    <option value="{{ category.id }}">{{ category.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Image</label>
+                            <input type="file" name="image" accept="image/*" class="mt-1 block w-full">
+                        </div>
+                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                            Add Product
+                        </button>
+                    </div>
+                </form>
+            {% endif %}
+
+            {% if active_tab == 'categories' %}
+                <h2 class="text-xl font-bold mb-4">Manage Categories</h2>
+                <form method="post" class="max-w-lg">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="add_category">
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700">Category Name</label>
+                            <input type="text" name="new_category" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                        </div>
+                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                            Add Category
+                        </button>
+                    </div>
+                </form>
+
+                <div class="mt-6">
+                    <h3 class="text-lg font-medium mb-2">Existing Categories</h3>
+                    <ul class="space-y-2">
+                        {% for category in categories %}
+                            <li class="flex items-center justify-between p-2 bg-gray-50 rounded">
+                                {{ category.name }}
+                                <button class="text-red-500 hover:text-red-700">Delete</button>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+            {% if active_tab == 'orders' %}
+                <h2 class="text-xl font-bold mb-4">Manage Orders</h2>
+                <!-- Orders content -->
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

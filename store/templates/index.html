@@ -1,0 +1,291 @@
+{% extends "layout.html" %}
+{% load static %}
+
+{% block title %}MerkazVibe - Home{% endblock %}
+
+{% block content %}
+    <!-- Main Content -->
+    <div class="container max-w-7xl mx-auto p-5">
+        <!-- Left, Center, Right Layout -->
+        <div class="main-layout flex gap-5">
+            <!-- Left: Categories and Top Deals -->
+            <aside class="left-section w-1/4 bg-white p-4 rounded-lg shadow">
+                <h3 class="text-lg font-bold mb-3">Categories</h3>
+                <ul class="list-none p-0 mb-6">
+                    {% if categories %}
+                        {% for category in categories %}
+                            <li class="mb-2"><a href="?category={{ category.id }}" class="{% if selected_category == category.id %}font-bold text-orange-600{% else %}text-gray-600{% endif %} hover:text-orange-600 text-sm flex items-center gap-1"><i class="fas fa-tag"></i> {{ category.name }}</a></li>
+                        {% empty %}
+                            <li>No categories available.</li>
+                        {% endfor %}
+                    {% else %}
+                        <li>Categories not loaded.</li>
+                    {% endif %}
+                </ul>
+                <!-- Updated Top Deals Section -->
+                <div class="top-deals">
+                    <h3 class="text-lg font-bold mb-3">Top Deals</h3>
+                    {% if top_deals %}
+                        {% for deal in top_deals %}
+                            <div class="deal-item bg-gray-100 p-3 rounded-lg mb-2 flex items-center gap-3">
+                                {% if deal.image %}
+                                    <img src="{{ deal.image.url }}" alt="{{ deal.title }}" class="deal-img">
+                                {% else %}
+                                    <img src="{% static 'images/placeholder.jpg' %}" alt="Deal Image" class="deal-img">
+                                {% endif %}
+                                <div>
+                                    <p class="text-sm font-semibold">{{ deal.title }}</p>
+                                    <a href="{{ deal.link }}" class="text-orange-600 text-sm hover:underline">Shop Now</a>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p class="text-sm text-gray-600">No deals available.</p>
+                    {% endif %}
+                </div>
+            </aside>
+
+            <!-- Center: Slider -->
+            <div class="center-section flex-1">
+                <div class="main-banner relative w-full max-w-5xl h-[300px] mx-auto my-5 rounded-xl overflow-hidden">
+                    <div id="slider-group" class="relative w-full h-full">
+                        {% if sliders %}
+                            {% for slide in sliders %}
+                                <div class="slider-item {% if forloop.first %}active{% endif %} w-full h-full absolute top-0 left-0 transition-opacity duration-500">
+                                    <div class="banner text-white w-full h-full flex items-center justify-center bg-cover bg-center" style="background-image: url('{% if slide.image %}{{ slide.image.url }}{% else %}{% static 'images/placeholder.jpg' %}{% endif %}');">
+                                        <div class="text-center bg-black bg-opacity-50 p-6 rounded">
+                                            <h2 class="text-3xl font-bold">{{ slide.text }}</h2>
+                                            <p class="text-base mt-4">{{ slide.description }}</p>
+                                            {% if slide.link %}
+                                                <a href="{{ slide.link }}" class="shop-now bg-orange-600 text-white px-4 py-2 mt-4 inline-block rounded hover:bg-orange-700 transition-colors">Shop Now</a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="w-full h-full flex items-center justify-center">
+                                <span class="text-gray-500">No sliders available.</span>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <button class="slider-nav slider-nav-left"><i class="fas fa-chevron-left"></i></button>
+                    <button class="slider-nav slider-nav-right"><i class="fas fa-chevron-right"></i></button>
+                    <div class="slider-dots absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+                        {% for slide in sliders %}
+                            <span class="dot w-3 h-3 rounded-full bg-white opacity-50 cursor-pointer {% if forloop.first %}active-dot{% endif %}" data-index="{{ forloop.counter0 }}"></span>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Promotional Banner -->
+            <aside class="right-section w-1/4">
+                <div class="promo-banner bg-gray-100 p-4 rounded-lg shadow">
+                    <img src="{% static 'images/promo-banner.jpg' %}" alt="Promotion" class="w-full h-48 object-cover rounded-lg mb-3">
+                    <h3 class="text-lg font-bold mb-2">Flash Sale!</h3>
+                    <p class="text-sm text-gray-600 mb-3">Up to 70% off on selected items. Hurry, ends soon!</p>
+                    <a href="{% url 'page_detail' slug='hotdeals' %}" class="bg-orange-600 text-white px-4 py-2 rounded hover:bg-orange-700 transition-colors inline-block">Shop Now</a>
+                </div>
+            </aside>
+        </div>
+
+        <!-- Bottom Section -->
+        <div class="bottom-section mt-10">
+            <!-- Featured Products -->
+            <h3 class="text-2xl font-bold text-gray-800 mb-4">Featured Products</h3>
+            <div class="products grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                {% if products %}
+                    {% for product in products %}
+                        <div class="product-card bg-white rounded-lg shadow overflow-hidden hover:scale-105 transition-transform">
+                            <a href="{% url 'product_details' product.id %}" class="block">
+                                {% if product.image %}
+                                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-[150px] object-cover">
+                                {% else %}
+                                    <div class="product-placeholder bg-blue-100 h-[150px] flex items-center justify-center text-gray-600">Product Image</div>
+                                {% endif %}
+                                <div class="p-4">
+                                    <h4 class="text-lg font-semibold mb-2">{{ product.name }}</h4>
+                                    <p class="text-sm text-gray-600">${{ product.price }}</p>
+                                </div>
+                            </a>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="no-results col-span-full text-center p-5 bg-white rounded-lg">No products available at the moment.</div>
+                {% endif %}
+            </div>
+
+            <!-- Secondary Promotional Banner -->
+            <div class="secondary-promo mt-10 bg-gradient-to-r from-blue-500 to-blue-700 p-6 rounded-lg text-center text-white">
+                <img src="{% static 'images/secondary-promo.jpg' %}" alt="Secondary Promotion" class="w-full max-w-md mx-auto h-32 object-cover rounded-lg mb-4">
+                <h3 class="text-2xl font-bold mb-2">Seasonal Offers</h3>
+                <p class="text-base mb-4">Get ready for the season with exclusive discounts!</p>
+                <a href="{% url 'page_detail' slug='hotdeals' %}" class="bg-white text-blue-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">Explore Deals</a>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .main-layout {
+            display: flex;
+            gap: 20px;
+        }
+        .left-section, .right-section {
+            flex-shrink: 0;
+        }
+        .center-section {
+            flex-grow: 1;
+        }
+        .slider-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(255, 255, 255, 0.9);
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1em;
+            color: #2b6cb0;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+        }
+        .slider-nav:hover {
+            background-color: #fff;
+            transform: translateY(-50%) scale(1.1);
+        }
+        .slider-nav-left {
+            left: 10px;
+        }
+        .slider-nav-right {
+            right: 10px;
+        }
+        .slider-item {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+        .slider-item.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .slider-dots {
+            display: flex;
+            justify-content: center;
+        }
+        .dot {
+            transition: opacity 0.3s ease;
+        }
+        .dot.active-dot {
+            opacity: 1;
+        }
+        .deal-img {
+            width: 40px;
+            height: 40px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        @media (max-width: 1024px) {
+            .main-layout {
+                flex-direction: column;
+            }
+            .left-section, .right-section {
+                width: 100%;
+            }
+        }
+        @media (max-width: 768px) {
+            .grid-cols-4 {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+            .h-\[150px\] {
+                height: 120px;
+            }
+            .main-banner {
+                height: 250px;
+            }
+            .slider-nav {
+                width: 30px;
+                height: 30px;
+                font-size: 0.9em;
+            }
+            .secondary-promo h3 {
+                font-size: 1.5rem;
+            }
+            .secondary-promo p {
+                font-size: 0.9rem;
+            }
+        }
+        @media (max-width: 480px) {
+            .grid-cols-4 {
+                grid-template-columns: 1fr;
+            }
+            .h-\[150px\] {
+                height: 100px;
+            }
+            .main-banner {
+                height: 200px;
+            }
+            .main-banner h2 {
+                font-size: 1.5rem;
+            }
+            .main-banner p {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const sliderGroup = document.getElementById('slider-group');
+            const slides = Array.from(sliderGroup.getElementsByClassName('slider-item'));
+            const prevButton = document.querySelector('.slider-nav-left');
+            const nextButton = document.querySelector('.slider-nav-right');
+            const dots = document.querySelectorAll('.dot');
+            let currentSlide = 0;
+            let isAnimating = false;
+
+            if (slides.length > 0) {
+                slides[0].classList.add('active');
+                if (dots.length > 0) dots[0].classList.add('active-dot');
+            }
+
+            function goToSlide(index) {
+                if (isAnimating || slides.length === 0) return;
+                isAnimating = true;
+
+                if (index >= slides.length) index = 0;
+                if (index < 0) index = slides.length - 1;
+
+                slides[currentSlide].classList.remove('active');
+                if (dots.length > 0) dots[currentSlide].classList.remove('active-dot');
+                slides[index].classList.add('active');
+                if (dots.length > 0) dots[index].classList.add('active-dot');
+                currentSlide = index;
+
+                setTimeout(() => {
+                    isAnimating = false;
+                }, 500);
+            }
+
+            if (prevButton && nextButton) {
+                prevButton.addEventListener('click', () => goToSlide(currentSlide - 1));
+                nextButton.addEventListener('click', () => goToSlide(currentSlide + 1));
+                dots.forEach(dot => {
+                    dot.addEventListener('click', () => goToSlide(parseInt(dot.dataset.index)));
+                });
+
+                let slideInterval = setInterval(() => goToSlide(currentSlide + 1), 5000);
+                const mainBanner = document.querySelector('.main-banner');
+                if (mainBanner) {
+                    mainBanner.addEventListener('mouseenter', () => clearInterval(slideInterval));
+                    mainBanner.addEventListener('mouseleave', () => {
+                        slideInterval = setInterval(() => goToSlide(currentSlide + 1), 5000);
+                    });
+                }
+            }
+        });
+    </script>
+{% endblock %}
