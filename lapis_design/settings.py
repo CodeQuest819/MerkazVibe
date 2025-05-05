@@ -1,4 +1,5 @@
 import os
+PORT = os.getenv('PORT', '10000')
 from pathlib import Path
 from dotenv import load_dotenv
 
