@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: MerkazVibe
+    env: python
+    plan: free
+    buildCommand: ""
+    startCommand: gunicorn lapis_design.wsgi:application
+    preDeployCommand: |
+      python manage.py migrate
+      python manage.py collectstatic --noinput

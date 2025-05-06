@@ -10,7 +10,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')  # Change this in production
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['merkazvibe.onrender.com']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -84,6 +84,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
