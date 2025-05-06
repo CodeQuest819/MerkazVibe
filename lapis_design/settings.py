@@ -1,4 +1,5 @@
 import os
+PORT = os.getenv('PORT', '10000')
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -10,7 +11,11 @@ SECRET_KEY = os.getenv('SECRET_KEY')  # Change this in production
 
 DEBUG = True
 
+<<<<<<< HEAD
 ALLOWED_HOSTS = ['merkazvibe.onrender.com']
+=======
+ALLOWED_HOSTS = ['https://merkazvibe.onrender.com', 'https://merkazvibe.onrender.com']
+>>>>>>> 632719db44020f71a48d1d394c32d155a4a64474
 
 INSTALLED_APPS = [
     'django.contrib.admin',
